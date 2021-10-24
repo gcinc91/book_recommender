@@ -1,7 +1,7 @@
-from flask import Flask
+from app import app
+import os
 
-app = Flask(__name__)
+import src.controllers.recommender
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+PORT =  app.run(host="localhost", port=os.environ.get('PORT', 5000), debug=True)
+app.run("0.0.0.0", PORT, debug=True)

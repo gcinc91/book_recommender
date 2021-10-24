@@ -1,4 +1,4 @@
-from utils.json_response import json_response
+from .json_response import json_response
 
 def handle_error(fn):
     def wrapper(*args, **kwargs):

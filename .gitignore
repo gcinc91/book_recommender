@@ -1,0 +1,7 @@
+
+# env varaibles
+.env
+
+
+#system files
+.DS_Store
