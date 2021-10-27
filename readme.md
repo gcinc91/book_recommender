@@ -13,7 +13,8 @@ que le pondrias(1 la mas baja, 5 la mas alta)
 
 ### **Instalacion** ###
 
-	`pip install requeriments.txt`
+	pip install requeriments.txt
+	
 
 ### **Getting Started** ###
 
@@ -21,15 +22,15 @@ Preparar los datos necesarios para que funcione.
 ejecutaremos el jupyter-notebook que hay en la carpeta preprocess 
 y ejecutaremos las celdas por debajo del titulo  *Fast instalation*:
 
-	`jupyter-notebook preprocess/data_clean.ipynb`
+	jupyter-notebook preprocess/data_clean.ipynb
 
 Despues procedemos  arrancar el servidor flask:
 
-	`python main.py`
+	python main.py
 
 y poor ultimo arrancaremos el servidor  streamlit:
 
-	`streamlit run streamlit.py`
+	streamlit run streamlit.py
 
 
 ---
