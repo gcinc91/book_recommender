@@ -1,9 +1,9 @@
 
 
-# **The Librarian** #
+# **Librarian** #
 ## recomendador de libros ##
 
-The librarian es un recomendador de libros **basado en los libros que has leidoy la nota** 
+Librarian es un recomendador de libros **basado en los libros que has leidoy la nota** 
 que le pondrias(1 la mas baja, 5 la mas alta)
 
 
