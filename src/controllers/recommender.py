@@ -28,7 +28,7 @@ def predict():
 
     user = data['user']
     model = data['model']
-    
+
     res = make_recommendation(user,model)
 
     data = {

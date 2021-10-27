@@ -11,7 +11,7 @@ import random
 from ..utils.jsonfy import jsonfy
 from ..utils.mapper_objs import mapper_object_list
 import redis
-
+from ..utils.categories import categories
 
 
 def charge_models():
@@ -78,6 +78,8 @@ def charge_models():
 
 def make_recommendation(user, n_model):
 
+    user = transform_user(user)
+
     recommender  = Reccomender()
 
     dirname = os.path.dirname(__file__)
@@ -123,7 +125,7 @@ def make_recommendation(user, n_model):
 
     return {
         "cluster": int(cluster),
-        "cluster_list": mapper_object_list(jsonfy(res))
+        "cluster_list": mapper_object_list(jsonfy(res[:24]))
         }
 
 
@@ -143,7 +145,6 @@ def  load_titles():
 
 def autocomplete(text):
 
-    print('text', text)
     r = redis.Redis(host='localhost', port=6379, db=0)
     keys = r.keys(f"*{text.lower()}*")
     
@@ -151,7 +152,50 @@ def autocomplete(text):
     for k in keys:
         res.append(k.decode('utf-8'))
 
-    print('key', res)
-
     return list(res)
 
+def transform_user(user):
+
+    user_categories = categories.copy()
+    books_ids = []
+    titles_list = []
+    rates_list = []
+
+    for b in user:
+        title, rate = b['title'], b['rate']
+
+        if title not in titles_list:
+            books_ids.append(search_book(title))
+            titles_list.append(title)
+            rates_list.append(rate)
+
+    query = f"""
+        select f_categories from books where book_id  IN {tuple(books_ids)}
+    """
+    books_c = list(db.execute(query))
+    books_categories = []
+
+    for cat in books_c:
+        for c in cat:   
+            if c:   
+                c = c.replace('{','')
+                c = c.replace('}','')
+                l = c.split(',')
+                books_categories.append(l)
+            books_categories.append(['other'])
+
+    index = 0
+    for r in rates_list:
+        rate = r
+        for cat in books_categories[index]:
+            if cat == 'other':
+                user_categories[cat] = user_categories[cat]+rate
+                break
+            user_categories[cat] = user_categories[cat]+rate
+        index = index+1
+
+    return user_categories
+
+def search_book(title):
+    r = redis.Redis(host='localhost', port=6379, db=0)
+    return r.get(title).decode('utf-8')
